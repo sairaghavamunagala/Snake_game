@@ -4,6 +4,7 @@ from collections import namedtuple
 import random
 
 pygame.init()
+font = pygame.font.Font("arial.ttf", 25)
 
 
 class Direction(Enum):
@@ -13,8 +14,16 @@ class Direction(Enum):
     DOWN = 4
 
 
-Point = namedtuple("Point", 'x, y')
+Point = namedtuple("Point", "x, y")
+
+WHITE = (255, 255, 255)
+RED = (200, 0, 0)
+BLUE1 = (0, 0, 255)
+BLUE2 = (0, 100, 255)
+BLACK = (0, 0, 0)
+
 BLOCK_SIZE = 20
+SPEED = 20
 
 
 class SnakeGame:
@@ -50,18 +59,46 @@ class SnakeGame:
 
     def playstep(self):
         """
-        This method handles gameover
+        This method handles update_ui,gameover.
         """
-        gameover=False
-        return gameover,self.score
+        self._update_ui()
+        self.clock.tick(SPEED)
+        gameover = False
+        return gameover, self.score
+
+    def _update_ui(self):
+        """
+        This method is responsible for updating UI,
+        it fills the screen with black color,
+        it draw the snake with two blue colors,
+        and also food item as well as score it will
+        display.
+        """
+        self.display.fill(BLACK)
+        for pt in self.snake:
+            pygame.draw.rect(
+                self.display, BLUE1, pygame.Rect(pt.x, pt.y, BLOCK_SIZE, BLOCK_SIZE)
+            )
+            pygame.draw.rect(
+                self.display, BLUE2, pygame.Rect(pt.x + 4, pt.y + 4, 12, 12)
+            )
+        pygame.draw.rect(
+            self.display,
+            RED,
+            pygame.Rect(self.food.x, self.food.y, BLOCK_SIZE, BLOCK_SIZE),
+        )
+
+        text = font.render("Score:" + str(self.score), True, WHITE)
+        self.display.blit(text, [0, 0])
+        pygame.display.flip()
 
 
 if __name__ == "__main__":
     game = SnakeGame()
 
     while True:
-        gameover,score=game.playstep()
-        if gameover==True:
+        gameover, score = game.playstep()
+        if gameover is True:
             break
-        print("Final Score:",score)
-        pygame.quit()
+        print("Final Score:", score)
+    pygame.quit()
