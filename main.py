@@ -13,12 +13,12 @@ class Direction(Enum):
     DOWN = 4
 
 
-Point = namedtuple("Point", [x, y])
+Point = namedtuple("Point", 'x, y')
 BLOCK_SIZE = 20
 
 
 class SnakeGame:
-    def __init__(self, width, height):
+    def __init__(self, width=640, height=480):
 
         self.width = width
         self.height = height
@@ -49,13 +49,19 @@ class SnakeGame:
             self._place_food()
 
     def playstep(self):
-        pass
+        """
+        This method handles gameover
+        """
+        gameover=False
+        return gameover,self.score
 
 
 if __name__ == "__main__":
     game = SnakeGame()
 
     while True:
-        game.playstep()
-
+        gameover,score=game.playstep()
+        if gameover==True:
+            break
+        print("Final Score:",score)
         pygame.quit()
