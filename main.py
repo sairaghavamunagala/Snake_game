@@ -1,6 +1,7 @@
 import pygame
 from enum import Enum
 from collections import namedtuple
+import random
 
 pygame.init()
 
@@ -38,7 +39,14 @@ class SnakeGame:
         self._place_food()
 
     def _place_food(self):
-        pass
+        """
+        This method is useful for putting the food in the game.
+        """
+        x = random.randint(0, (self.width - BLOCK_SIZE) // BLOCK_SIZE) * BLOCK_SIZE
+        y = random.randint(0, (self.height - BLOCK_SIZE) // BLOCK_SIZE) * BLOCK_SIZE
+        self.food = Point(x, y)
+        if self.food in self.snake:
+            self._place_food()
 
     def playstep(self):
         pass
