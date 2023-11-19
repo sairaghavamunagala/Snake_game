@@ -23,7 +23,7 @@ BLUE2 = (0, 100, 255)
 BLACK = (0, 0, 0)
 
 BLOCK_SIZE = 20
-SPEED = 20
+SPEED = 10
 
 
 class SnakeGame:
@@ -42,7 +42,6 @@ class SnakeGame:
             Point(self.head.x - BLOCK_SIZE, self.head.y),
             Point(self.head.x - (2 * BLOCK_SIZE), self.head.y),
         ]
-
         self.score = 0
         self.food = None
         self._place_food()
@@ -80,6 +79,12 @@ class SnakeGame:
         if self.is_collision():
             gameover=True
             return gameover,self.score
+        
+        if self.head==self.food:
+            self.score+=1
+            self._place_food()
+        else:
+            self.snake.pop()
        
         self._update_ui()
         self.clock.tick(SPEED)
@@ -124,7 +129,6 @@ class SnakeGame:
         pygame.display.flip()
 
     def _move(self,direction):
-        print(self.head)
         x=self.head.x
         y=self.head.y
         if direction==Direction.RIGHT:
@@ -144,6 +148,7 @@ if __name__ == "__main__":
     while True:
         gameover, score = game.playstep()
         if gameover is True:
+            print("Final Score:", score)
             break
-        print("Final Score:", score)
+        
     pygame.quit()
