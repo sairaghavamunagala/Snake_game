@@ -74,14 +74,28 @@ class SnakeGame:
                     self.direction=Direction.UP
                 if event.key==pygame.K_DOWN:
                     self.direction=Direction.DOWN
-
         self._move(self.direction)
         self.snake.insert(0,self.head)
+        gameover=False
+        if self.is_collision():
+            gameover=True
+            return gameover,self.score
+       
         self._update_ui()
         self.clock.tick(SPEED)
-        gameover = False
+        
         return gameover, self.score
     
+    def is_collision(self):
+        """
+        This method checks for boundary conditions 
+        and also snake is eating itself.
+        """
+        if self.head.x < 0 or self.head.x > self.width -BLOCK_SIZE or self.head.y < 0 or self.head.y > self.height-BLOCK_SIZE:
+            return True
+        if self.head in self.snake[1:]:
+            return True
+        return False
 
     def _update_ui(self):
         """
