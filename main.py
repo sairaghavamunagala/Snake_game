@@ -61,10 +61,27 @@ class SnakeGame:
         """
         This method handles update_ui,gameover.
         """
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type ==pygame.KEYDOWN:
+                if event.key==pygame.K_LEFT:
+                    self.direction=Direction.LEFT
+                if event.key==pygame.K_RIGHT:
+                    self.direction=Direction.RIGHT
+                if event.key==pygame.K_UP:
+                    self.direction=Direction.UP
+                if event.key==pygame.K_DOWN:
+                    self.direction=Direction.DOWN
+
+        self._move(self.direction)
+        self.snake.insert(0,self.head)
         self._update_ui()
         self.clock.tick(SPEED)
         gameover = False
         return gameover, self.score
+    
 
     def _update_ui(self):
         """
@@ -92,6 +109,20 @@ class SnakeGame:
         self.display.blit(text, [0, 0])
         pygame.display.flip()
 
+    def _move(self,direction):
+        print(self.head)
+        x=self.head.x
+        y=self.head.y
+        if direction==Direction.RIGHT:
+            x+=BLOCK_SIZE
+        if direction==Direction.LEFT:
+            x-=BLOCK_SIZE
+        if direction==Direction.UP:
+            y-=BLOCK_SIZE
+        if direction==Direction.DOWN:
+            y+=BLOCK_SIZE
+
+        self.head=Point(x,y)
 
 if __name__ == "__main__":
     game = SnakeGame()
